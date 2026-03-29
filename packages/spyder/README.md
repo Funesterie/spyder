@@ -1,59 +1,49 @@
-SPYDER Core - local copy in D:/spyder
+# @funeste38/spyder
 
-Run:
-cd D:/spyder
-npm install
-npm run start
+`spyder` packages the lightweight local assistant primitives of the Funesterie ecosystem.
 
-This is the description of what the code block changes:
-Add expanded documentation and usage examples
+It focuses on a small programmable server surface rather than a giant framework: start a TCP-aware runtime, keep a simple in-memory state, and bridge packets or events to another service such as A11.
 
-This is the code block that represents the suggested code change:
+## Install
 
-````````markdown
-SPYDER — local assistant components
+```bash
+npm install @funeste38/spyder
+```
 
-Résumé
+## What You Get
 
-`@funeste38/spyder` fournit des composants réutilisables pour construire un serveur SPYDER léger :
-- `SpyderServer` : serveur TCP extensible pour recevoir des paquets, stocker en mémoire et relayer à un service A-11.
-- Mémoire en RAM simple et utilitaires pour encoder/décoder les paquets.
+- `createSpyderServer(...)` to start a small Spyder runtime in-process
+- a simple memory object attached to the running server
+- a custom `sendToA11` bridge hook so A11 integration stays explicit
+- a package that is small enough to embed into local tooling or automation
 
-Principales fonctionnalités
-
-- API programmatique (classe `SpyderServer`) pour intégrer SPYDER dans n'importe quel projet Node.js.
-- Comportement CLI minimal quand exécuté directement (démarrage du serveur).
-- Packagé comme module indépendant (pas de dépendance à qflush).
-
-Installation
-
-- Depuis npm (publier manuellement si nécessaire) :
-  npm install @funeste38/spyder
-
-- Localement depuis un tarball :
-  npm install /path/to/funeste38-spyder-1.0.0.tgz
-
-Quickstart (programmatique)
+## Quick Example
 
 ```ts
-import { createSpyderServer } from '@funeste38/spyder';
+import { createSpyderServer } from "@funeste38/spyder";
 
-const server = createSpyderServer({ port: 4500, sendToA11: async (payload) => { /* your bridge */ return new Uint8Array(); } });
+const server = createSpyderServer({
+  port: 4500,
+  sendToA11: async (payload) => {
+    console.log("bridge payload", payload);
+    return new Uint8Array();
+  }
+});
+
 await server.start();
-// ...
 await server.stop();
 ```
 
-CLI
+## Development
 
-Le package peut être exécuté directement (démarre le serveur par défaut sur 127.0.0.1:4000):
+```bash
+npm install
+npm run build
+npm test
+```
 
-node dist/index.js
+## Notes
 
-Documentation
-
-Voir `USAGE.md` et `API.md` pour les exemples détaillés et la référence.
-
-Licence
-
-MIT — voir `package.json`.
+- this package is intentionally local-first
+- deeper socket and protocol integrations can be layered on top
+- if you need the larger orchestration stack, use `@funeste38/qflush`
