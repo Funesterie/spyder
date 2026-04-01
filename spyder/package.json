@@ -1,7 +1,8 @@
 {
   "name": "@funeste38/spyder",
   "version": "1.0.0",
-  "description": "Spyder package for Funesterie — local assistant components",
+  "private": true,
+  "description": "Legacy Spyder mirror kept for local compatibility only. Do not publish from this folder.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

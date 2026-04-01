@@ -1,6 +1,6 @@
-SPYDER Core - local copy in D:/spyder
+SPYDER legacy mirror
 
-Run:
-cd D:/spyder
-npm install
-npm run start
+This folder is a local compatibility copy only.
+
+Do not publish `@funeste38/spyder` from here.
+The canonical npm package source is `D:/SPYDER/packages/spyder`.
