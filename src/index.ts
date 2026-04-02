@@ -321,9 +321,13 @@ if (typeof require !== 'undefined' && require.main === module) {
   if (!cliHandled) {
     const { pipeline, options } = buildPipeline(argv);
 
-    executePipeline(pipeline, options).catch((err) => {
-      console.error("qflush: fatal", err);
-      process.exit(1);
-    });
+    executePipeline(pipeline, options)
+      .then(() => {
+        process.exit(0);
+      })
+      .catch((err) => {
+        console.error("qflush: fatal", err);
+        process.exit(1);
+      });
   }
 }
