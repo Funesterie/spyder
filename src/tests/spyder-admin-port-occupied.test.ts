@@ -47,6 +47,7 @@ describe('spyder admin port occupied behavior', () => {
 
     // mock startService to avoid side effects
     vi.mock('../../src/services', () => ({ startService: async () => { return; } }));
+    vi.mock('../../src/supervisor', () => ({ startProcess: vi.fn() }));
 
     const { runStart } = await import('../../src/commands/start');
     await runStart({ services: ['spyder'] as any, flags: {} as any } as any);
