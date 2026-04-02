@@ -48,10 +48,12 @@ export async function startServer(port?: number) {
   return new Promise((resolve, reject) => {
     try {
       if (_server) {
-        return resolve({ ok: true, port: (port || process.env.QFLUSHD_PORT || 4500) });
+        const addr = _server.address();
+        const activePort = typeof addr === 'object' && addr ? addr.port : (port ?? (process.env.QFLUSHD_PORT ? Number(process.env.QFLUSHD_PORT) : 4500));
+        return resolve({ ok: true, port: activePort });
       }
 
-      const p = port || (process.env.QFLUSHD_PORT ? Number(process.env.QFLUSHD_PORT) : 4500);
+      const p = port ?? (process.env.QFLUSHD_PORT ? Number(process.env.QFLUSHD_PORT) : 4500);
       const srv = http.createServer(async (req, res) => {
         try {
           const parsed = url.parse(req.url || '', true);
@@ -304,6 +306,9 @@ export async function startServer(port?: number) {
         try {
           const addr = srv.address();
           console.warn('[qflushd] listening', addr);
+          const activePort = typeof addr === 'object' && addr ? addr.port : p;
+          resolve({ ok: true, port: activePort });
+          return;
         } catch (e) { console.warn('[qflushd] failed to get server address:', String(e)); }
         resolve({ ok: true, port: p });
       });

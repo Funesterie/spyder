@@ -4,17 +4,18 @@ import { startServer, stopServer } from '../daemon/qflushd';
 import fs from 'fs';
 import path from 'path';
 
-const URL = 'http://127.0.0.1:4500';
+let URL = 'http://127.0.0.1:4500';
 
-beforeAll(() => {
+beforeAll(async () => {
   process.env.QFLUSH_TOKEN = 'test-token';
   process.env.QFLUSH_SAFE_CI = '1';
-  // ensure server started
-  startServer(4500);
+  const started = await startServer(0);
+  const port = Number((started as any)?.port || 4500);
+  URL = `http://127.0.0.1:${port}`;
 });
 
-afterAll(() => {
-  try { stopServer(); } catch (e) {}
+afterAll(async () => {
+  try { await stopServer(); } catch (e) {}
 });
 
 describe('NPZ BAT control endpoints (embedded)', () => {
